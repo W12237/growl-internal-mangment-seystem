@@ -80,6 +80,14 @@ app.use(logger);
 // Serve uploaded creatives statically
 app.use('/uploads', express.static(path.join(__dirname, '../uploads')));
 
+// Support /api/backend prefix (when routed via Next.js rewrites, Vercel, or proxy)
+app.use((req, res, next) => {
+  if (req.url.startsWith('/api/backend')) {
+    req.url = req.url.slice('/api/backend'.length) || '/';
+  }
+  next();
+});
+
 app.get('/health', (req, res) => res.json({ status: 'ok', system: 'Growl Business OS', modules: 22, phase: '6' }));
 
 // ── Routes ───────────────────────────────────────────────────────────────────
@@ -138,10 +146,17 @@ app.use((err, req, res, next) => {
   res.status(err.status || 500).json({ error: err.message || 'Internal server error' });
 });
 
-const PORT = process.env.PORT || 5000;
-httpServer.listen(PORT, () => {
-  console.log(`Growl Business OS — port ${PORT} — 22 modules active (Phase 6)`);
-  console.log('Finance Engine: P&L | Cash Flow | COGS | Fixed Costs | Allocation | Business Units');
-  startSyncScheduler(io);
-});
-module.exports = { app, io, automation };
+const PORT = process.env.PORT || 4000;
+if (!process.env.VERCEL) {
+  httpServer.listen(PORT, () => {
+    console.log(`Growl Business OS — port ${PORT} — 22 modules active (Phase 6)`);
+    console.log('Finance Engine: P&L | Cash Flow | COGS | Fixed Costs | Allocation | Business Units');
+    startSyncScheduler(io);
+  });
+}
+
+module.exports = app;
+module.exports.app = app;
+module.exports.httpServer = httpServer;
+module.exports.io = io;
+module.exports.automation = automation;
