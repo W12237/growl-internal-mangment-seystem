@@ -40,7 +40,7 @@ export default function ClientLayoutWrapper({ children }) {
   if (!ready) {
     return (
       <LocaleProvider>
-        <div className="min-h-screen flex items-center justify-center" style={{ background: 'var(--bg, #0D0E1A)' }}>
+        <div className="min-h-screen flex items-center justify-center" style={{ background: 'var(--bg, #F4F4F7)' }}>
           <div className="w-8 h-8 border-2 border-blue-500 border-t-transparent rounded-full animate-spin" />
         </div>
       </LocaleProvider>
@@ -62,7 +62,7 @@ export default function ClientLayoutWrapper({ children }) {
 
   return (
     <LocaleProvider>
-      <div className="flex min-h-screen" style={{ background: 'var(--bg, #0D0E1A)' }}>
+      <div className="flex min-h-screen" style={{ background: 'var(--bg, #F4F4F7)' }}>
         <Sidebar />
         <main
           ref={mainRef}

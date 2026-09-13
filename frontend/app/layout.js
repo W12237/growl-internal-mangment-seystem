@@ -1,4 +1,5 @@
 import './globals.css'
+import '@fortawesome/fontawesome-free/css/all.min.css'
 import Toaster from '../components/Toaster'
 import ClientLayoutWrapper from '../components/ClientLayoutWrapper'
 

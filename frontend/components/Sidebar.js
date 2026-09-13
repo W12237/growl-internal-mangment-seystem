@@ -119,54 +119,170 @@ export default function Sidebar() {
   }
 
   return (
-    <aside className="w-56 flex flex-col h-screen sticky top-0 border-r" style={{ background: 'var(--bg)', borderColor: 'var(--sidebar-border)' }}>
-      <div className="px-4 py-4 border-b" style={{ borderColor: 'var(--sidebar-border)' }}>
-        <Image src="/growl-icons/growl-group-icon.png" alt="Growl" width={130} height={36} className="object-contain" priority />
+    <aside
+      className="w-60 flex flex-col h-screen sticky top-0 border-r transition-all duration-200"
+      style={{
+        background: 'var(--surface)',
+        borderColor: 'var(--border)',
+        boxShadow: '1px 0 8px rgba(0, 8, 35, 0.02)',
+      }}
+    >
+      {/* Brand Header */}
+      <div
+        className="px-5 py-4 border-b flex items-center justify-between"
+        style={{ borderColor: 'var(--border)' }}
+      >
+        <div className="flex items-center gap-3">
+          <div
+            className="p-1.5 rounded-xl border flex items-center justify-center"
+            style={{
+              background: 'var(--surface-2)',
+              borderColor: 'var(--border)',
+            }}
+          >
+            <Image
+              src="/growl-icons/growl-group-icon.png"
+              alt="Growl"
+              width={26}
+              height={26}
+              className="object-contain"
+              priority
+            />
+          </div>
+          <div>
+            <span
+              className="font-extrabold text-[15px] tracking-tight block leading-tight"
+              style={{ color: 'var(--brand)' }}
+            >
+              Growl
+            </span>
+            <span
+              className="text-[10px] font-semibold uppercase tracking-wider block"
+              style={{ color: 'var(--text-3)' }}
+            >
+              Business OS
+            </span>
+          </div>
+        </div>
+        <span
+          className="px-1.5 py-0.5 rounded text-[9px] font-bold uppercase tracking-wider"
+          style={{
+            background: 'var(--brand-accent-soft)',
+            color: 'var(--brand-accent)',
+          }}
+        >
+          v2.0
+        </span>
       </div>
 
-      <nav className="flex-1 px-2 py-3 overflow-y-auto scrollbar-thin">
+      {/* Navigation Groups */}
+      <nav className="flex-1 px-3 py-4 overflow-y-auto scrollbar-thin space-y-4">
         {NAV_CONFIG.map(({ groupKey, items }) => {
           const visible = items.filter(isVisible)
           if (visible.length === 0) return null
           return (
-            <div key={groupKey} className="mb-4">
-              <p className="text-[10px] font-bold uppercase tracking-widest px-3 mb-1" style={{ color: 'var(--text-muted)' }}>{t(groupKey)}</p>
-              {visible.map(item => {
-                const active = isActive(pathname, item.href)
-                return (
-                  <Link key={item.href} href={item.href}
-                    className="flex items-center gap-2.5 px-3 py-2 rounded-lg text-[13px] font-medium transition-all mb-0.5"
-                    style={active
-                      ? {
-                        background: 'rgba(0,74,255,0.15)',
-                        color: 'var(--text)',
-                        [dir === 'rtl' ? 'borderRight' : 'borderLeft']: '2px solid var(--brand-blue)',
+            <div key={groupKey}>
+              <p
+                className="text-[10px] font-bold uppercase tracking-wider px-2.5 mb-1.5"
+                style={{ color: 'var(--text-4)' }}
+              >
+                {t(groupKey)}
+              </p>
+              <div className="space-y-0.5">
+                {visible.map(item => {
+                  const active = isActive(pathname, item.href)
+                  return (
+                    <Link
+                      key={item.href}
+                      href={item.href}
+                      className={`flex items-center gap-3 px-2.5 py-2 rounded-xl text-[13px] font-medium transition-all duration-150 group ${
+                        active
+                          ? 'shadow-xs'
+                          : 'hover:bg-slate-100/70 hover:translate-x-0.5'
+                      }`}
+                      style={
+                        active
+                          ? {
+                              background: 'var(--brand)',
+                              color: '#ffffff',
+                              boxShadow: '0 2px 8px rgba(0, 8, 35, 0.15)',
+                            }
+                          : {
+                              color: 'var(--text-2)',
+                            }
                       }
-                      : { color: 'var(--text-secondary)' }}>
-                    <span className="text-base leading-none">{item.icon}</span>
-                    {t(item.labelKey)}
-                  </Link>
-                )
-              })}
+                    >
+                      <span
+                        className="flex-shrink-0 transition-transform group-hover:scale-105"
+                        style={{
+                          color: active ? '#ffffff' : 'var(--text-3)',
+                        }}
+                      >
+                        {item.icon}
+                      </span>
+                      <span className="truncate">{t(item.labelKey)}</span>
+                    </Link>
+                  )
+                })}
+              </div>
             </div>
           )
         })}
       </nav>
 
-      <div className="px-2 py-3 border-t" style={{ borderColor: 'var(--sidebar-border)' }}>
-        <Link href="/profile" className="flex items-center gap-2.5 px-3 py-2.5 rounded-lg hover:bg-white/5 transition">
-          <div className="w-7 h-7 rounded-lg flex items-center justify-center text-white text-xs font-bold flex-shrink-0"
-            style={{ background: 'var(--brand-blue)' }}>
+      {/* User Footer Profile */}
+      <div
+        className="p-3 border-t m-2 rounded-2xl"
+        style={{
+          background: 'var(--surface-2)',
+          borderColor: 'var(--border)',
+          borderWidth: 1,
+        }}
+      >
+        <Link
+          href="/profile"
+          className="flex items-center gap-3 p-1.5 rounded-xl hover:bg-white transition-all group"
+        >
+          <div
+            className="w-8 h-8 rounded-xl flex items-center justify-center text-white text-xs font-bold flex-shrink-0 shadow-xs"
+            style={{ background: 'var(--brand)' }}
+          >
             {user?.name?.[0]?.toUpperCase() || 'U'}
           </div>
           <div className="flex-1 min-w-0">
-            <p className="text-[12px] font-semibold truncate" style={{ color: 'var(--text)' }}>{user?.name || t('common.user')}</p>
-            <p className="text-[10px] text-slate-500 capitalize">{role?.toLowerCase().replace(/_/g, ' ')}</p>
+            <p
+              className="text-[12px] font-semibold truncate leading-tight group-hover:text-blue-600 transition"
+              style={{ color: 'var(--text)' }}
+            >
+              {user?.name || t('common.user')}
+            </p>
+            <p
+              className="text-[10px] font-medium truncate capitalize mt-0.5"
+              style={{ color: 'var(--text-3)' }}
+            >
+              {role?.toLowerCase().replace(/_/g, ' ')}
+            </p>
           </div>
-          <button onClick={(e) => { e.preventDefault(); logout() }} title={t('common.logout')}
-            className="text-slate-600 hover:text-red-400 transition flex-shrink-0">
-            <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
+          <button
+            onClick={(e) => {
+              e.preventDefault()
+              logout()
+            }}
+            title={t('common.logout')}
+            className="p-1.5 rounded-lg text-slate-400 hover:text-red-500 hover:bg-red-50 transition flex-shrink-0"
+          >
+            <svg
+              className="w-4 h-4"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={2}
+                d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"
+              />
             </svg>
           </button>
         </Link>
